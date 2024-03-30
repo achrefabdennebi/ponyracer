@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { formatDistanceToNowStrict, parseISO } from 'date-fns';
 import { PonyComponent } from '../pony/pony.component';
 import { RaceComponent } from './race.component';
 
@@ -21,7 +22,7 @@ describe('RaceComponent', () => {
         { id: 4, name: 'Superb Whiskey', color: 'GREEN' },
         { id: 5, name: 'Fast Rainbow', color: 'BLUE' }
       ],
-      startInstant: '2022-02-18T08:02:00'
+      startInstant: '2020-02-18T08:02:00Z'
     };
 
     // when triggering the change detection
@@ -32,9 +33,14 @@ describe('RaceComponent', () => {
     const raceName = element.querySelector('h2');
     expect(raceName).withContext('You need an h2 element for the race name').not.toBeNull();
     expect(raceName.textContent).withContext('The h2 element should contain the race name').toContain('Paris');
+    const directives = fixture.debugElement.queryAll(By.directive(PonyComponent));
+    expect(directives).withContext('You should use the PonyComponent in your template to display the ponies').not.toBeNull();
+    expect(directives.length).withContext('You should have five pony components in your template').toBe(5);
     const startInstant = element.querySelector('p');
     expect(startInstant).withContext('You need an p element for the race start instant').not.toBeNull();
-    expect(startInstant.textContent).withContext('The p element should contain the race start instant').toContain('2/18/22, 8:02 AM');
+    expect(startInstant.textContent)
+      .withContext('You should use the `fromNow` pipe you created to format the start instant')
+      .toContain(formatDistanceToNowStrict(parseISO(raceComponent.raceModel.startInstant), { addSuffix: true }));
     const ponies = fixture.debugElement.queryAll(By.directive(PonyComponent));
     expect(ponies).withContext('You should use the PonyComponent in your template to display the ponies').not.toBeNull();
     expect(ponies.length).withContext('You should have five pony components in your template').toBe(5);
