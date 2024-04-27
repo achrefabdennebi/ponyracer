@@ -13,6 +13,6 @@ import { RaceService } from '../race.service';
 export class RacesComponent {
   races: RaceModel[] = [];
   constructor(private raceService: RaceService) {
-    this.races = this.raceService.list();
+    this.raceService.list().subscribe(races => (this.races = races));
   }
 }
