@@ -3,14 +3,18 @@
     <label for="login" class="form-label">Login</label>
     <input id="login" type="text" class="form-control" formControlName="login" />
     <!-- error message here -->
-    <div id="login-required-error"
-         class="invalid-feedback"
-         *ngIf="userForm.controls.login.dirty && userForm.controls.login.hasError('required')" >
+    <div
+      id="login-required-error"
+      class="invalid-feedback"
+      *ngIf="userForm.controls.login.dirty && userForm.controls.login.hasError('required')"
+    >
       Login is required
     </div>
-    <div id="login-length-error"
-         class="invalid-feedback"
-          *ngIf="userForm.controls.login.dirty && userForm.controls.login.hasError('minlength')">
+    <div
+      id="login-length-error"
+      class="invalid-feedback"
+      *ngIf="userForm.controls.login.dirty && userForm.controls.login.hasError('minlength')"
+    >
       Your login should be at least 3 characters
     </div>
   </div>
@@ -19,16 +23,20 @@
       <label for="password" class="form-label">Password</label>
       <input id="password" type="password" class="form-control" formControlName="password" />
       <!-- error message here -->
-      <div id="password-required-error"
-           class="invalid-feedback"
-           *ngIf="userForm.controls.passwordForm.controls.password.dirty
-                  && userForm.controls.passwordForm.controls.password.hasError('required')">
+      <div
+        id="password-required-error"
+        class="invalid-feedback"
+        *ngIf="
+          userForm.controls.passwordForm.controls.password.dirty && userForm.controls.passwordForm.controls.password.hasError('required')
+        "
+      >
         Password is required
       </div>
-      <div id="password-matching-error"
-           class="invalid-feedback"
-           *ngIf="userForm.controls.passwordForm.dirty
-                  && userForm.controls.passwordForm.hasError('matchingError')">
+      <div
+        id="password-matching-error"
+        class="invalid-feedback"
+        *ngIf="userForm.controls.passwordForm.dirty && userForm.controls.passwordForm.hasError('matchingError')"
+      >
         Your password does not match
       </div>
     </div>
@@ -36,10 +44,14 @@
       <label for="confirmPassword" class="form-label">Confirm password</label>
       <input id="confirmPassword" type="password" class="form-control" formControlName="confirmPassword" />
       <!-- error message here -->
-      <div id="confirm-password-required-error"
-           class="invalid-feedback"
-           *ngIf="userForm.controls.passwordForm.controls.confirmPassword.dirty
-                  && userForm.controls.passwordForm.controls.confirmPassword.hasError('required')">
+      <div
+        id="confirm-password-required-error"
+        class="invalid-feedback"
+        *ngIf="
+          userForm.controls.passwordForm.controls.confirmPassword.dirty &&
+          userForm.controls.passwordForm.controls.confirmPassword.hasError('required')
+        "
+      >
         Password confirmation is required
       </div>
     </div>
@@ -48,16 +60,18 @@
     <label for="birthYear" class="form-label">Birth year</label>
     <input id="birthYear" type="number" class="form-control" formControlName="birthYear" />
     <!-- error message here -->
-    <div id="birth-year-required-error"
-         class="invalid-feedback"
-         *ngIf="userForm.controls.birthYear.dirty
-                && userForm.controls.birthYear.hasError('required')">
+    <div
+      id="birth-year-required-error"
+      class="invalid-feedback"
+      *ngIf="userForm.controls.birthYear.dirty && userForm.controls.birthYear.hasError('required')"
+    >
       Birth year is required
     </div>
-    <div id="birth-year-invalid-error"
-         class="invalid-feedback"
-         *ngIf="userForm.controls.birthYear.hasError('min')
-          || userForm.controls.birthYear.hasError('max')">
+    <div
+      id="birth-year-invalid-error"
+      class="invalid-feedback"
+      *ngIf="userForm.controls.birthYear.hasError('min') || userForm.controls.birthYear.hasError('max')"
+    >
       This is not a valid year
     </div>
   </div>
