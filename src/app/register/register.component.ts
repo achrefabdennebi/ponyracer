@@ -3,6 +3,7 @@ import { AbstractControl, NonNullableFormBuilder, ReactiveFormsModule, Validatio
 import { UserService } from '../user.service';
 import { Router } from '@angular/router';
 import { NgIf } from '@angular/common';
+import { UserModel } from '../models/user.model';
 
 @Component({
   selector: 'pr-register',
@@ -12,6 +13,7 @@ import { NgIf } from '@angular/common';
   styleUrl: './register.component.css'
 })
 export class RegisterComponent {
+  registrationFailed = false;
   login = this.fb.control('', [Validators.required, Validators.minLength(3)]);
   password = this.fb.control('', [Validators.required]);
   confirmPassword = this.fb.control('', [Validators.required]);
@@ -49,6 +51,10 @@ export class RegisterComponent {
   }
 
   register(): void {
-    console.log('form submitted');
+    const { login, passwordForm, birthYear } = this.userForm.value;
+    this.userService.register(login, passwordForm?.password, birthYear).subscribe({
+      next: (user: UserModel) => this.router.navigateByUrl('/'),
+      error: () => (this.registrationFailed = true)
+    });
   }
 }

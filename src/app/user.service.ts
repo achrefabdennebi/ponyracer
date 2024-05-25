@@ -16,4 +16,17 @@ export class UserService {
     };
     return this.httpClient.post<UserModel>('https://ponyracer.ninja-squad.com/api/users/authentication', authenticationInfo);
   }
+
+  register(
+    login: string | null | undefined,
+    password: string | null | undefined,
+    birthYear: number | null | undefined
+  ): Observable<UserModel> {
+    const registerInfo = {
+      login,
+      password,
+      birthYear
+    };
+    return this.httpClient.post<UserModel>('https://ponyracer.ninja-squad.com/api/users', registerInfo);
+  }
 }

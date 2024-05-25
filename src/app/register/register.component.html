@@ -1,4 +1,8 @@
 <form [formGroup]="userForm" (ngSubmit)="register()">
+  <h1>Register</h1>
+  @if (registrationFailed) {
+    <div id="registration-error" class="alert alert-danger">Try again with another login.</div>
+  }
   <div class="mb-3">
     <label for="login" class="form-label">Login</label>
     <input id="login" type="text" class="form-control" formControlName="login" />
