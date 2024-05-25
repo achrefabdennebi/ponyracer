@@ -1,28 +1,34 @@
-<form [formGroup]="userForm">
+<form [formGroup]="userForm" (ngSubmit)="register()">
   <div class="mb-3">
     <label for="login" class="form-label">Login</label>
     <input id="login" type="text" class="form-control" formControlName="login" />
     <!-- error message here -->
-    <div class="invalid-feedback">Login is required</div>
+    <div id="login-required-error" class="invalid-feedback">Login is required</div>
+    <div id="login-length-error" class="invalid-feedback">Your login should be at least 3 characters</div>
   </div>
   <div formGroupName="passwordForm">
     <div class="mb-3">
       <label for="password" class="form-label">Password</label>
       <input id="password" type="password" class="form-control" formControlName="password" />
       <!-- error message here -->
-      <div class="invalid-feedback">Password is required</div>
+      <div id="password-required-error" class="invalid-feedback">Password is required</div>
+      <div id="password-matching-error" class="invalid-feedback">Your password does not match</div>
     </div>
     <div class="mb-3">
       <label for="confirmPassword" class="form-label">Confirm password</label>
       <input id="confirmPassword" type="password" class="form-control" formControlName="confirmPassword" />
       <!-- error message here -->
-      <div class="invalid-feedback">Confirm password is required</div>
+      <div id="confirm-password-required-error" class="invalid-feedback">Password confirmation is required</div>
     </div>
   </div>
   <div class="mb-3">
     <label for="birthYear" class="form-label">Birth year</label>
     <input id="birthYear" type="number" class="form-control" formControlName="birthYear" />
     <!-- error message here -->
-    <div class="invalid-feedback">Birth year is required</div>
+    <div id="birth-year-required-error" class="invalid-feedback">Birth year is required</div>
+    <div id="birth-year-invalid-error" class="invalid-feedback">This is not a valid year</div>
+  </div>
+  <div class="mb-3">
+    <button type="submit" class="btn btn-primary" [disabled]="userForm.invalid">Register</button>
   </div>
 </form>

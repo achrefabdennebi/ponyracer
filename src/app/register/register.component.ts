@@ -31,4 +31,14 @@ export class RegisterComponent {
     private userService: UserService,
     private router: Router
   ) {}
+
+  static passwordMatch() {
+    return {
+      matchingError: true
+    }
+  }
+
+  register(): void {
+    console.log('form submitted');
+  }
 }
