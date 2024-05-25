@@ -1,0 +1,28 @@
+<form [formGroup]="userForm">
+  <div class="mb-3">
+    <label for="login" class="form-label">Login</label>
+    <input id="login" type="text" class="form-control" formControlName="login" />
+    <!-- error message here -->
+    <div class="invalid-feedback">Login is required</div>
+  </div>
+  <div formGroupName="passwordForm">
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input id="password" type="password" class="form-control" formControlName="password" />
+      <!-- error message here -->
+      <div class="invalid-feedback">Password is required</div>
+    </div>
+    <div class="mb-3">
+      <label for="confirmPassword" class="form-label">Confirm password</label>
+      <input id="confirmPassword" type="password" class="form-control" formControlName="confirmPassword" />
+      <!-- error message here -->
+      <div class="invalid-feedback">Confirm password is required</div>
+    </div>
+  </div>
+  <div class="mb-3">
+    <label for="birthYear" class="form-label">Birth year</label>
+    <input id="birthYear" type="number" class="form-control" formControlName="birthYear" />
+    <!-- error message here -->
+    <div class="invalid-feedback">Birth year is required</div>
+  </div>
+</form>
