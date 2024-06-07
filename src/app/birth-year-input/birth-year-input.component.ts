@@ -75,5 +75,6 @@ export class BirthYearInputComponent implements ControlValueAccessor, Validator 
     } else if (this.year < 1900 || this.year > new Date().getFullYear()) {
       return { invalidYear: true };
     }
-    return null;  }
+    return null;
+  }
 }
