@@ -1,5 +1,5 @@
 import { Component, forwardRef, Input } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { AbstractControl, ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
 
 @Component({
   selector: 'pr-birth-year-input',
@@ -10,12 +10,13 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => BirthYearInputComponent),
       multi: true
-    }
+    },
+    { provide: NG_VALIDATORS, useExisting: forwardRef(() => BirthYearInputComponent), multi: true }
   ],
   templateUrl: './birth-year-input.component.html',
   styleUrl: './birth-year-input.component.css'
 })
-export class BirthYearInputComponent implements ControlValueAccessor {
+export class BirthYearInputComponent implements ControlValueAccessor, Validator {
   value: number | null = null;
   year: number | null = null;
   disabled = false;
@@ -30,6 +31,8 @@ export class BirthYearInputComponent implements ControlValueAccessor {
     if (isNaN(value)) {
       this.year = null;
       this.onChange(null);
+    } else {
+      this.onChange(value);
     }
   }
 
@@ -62,5 +65,9 @@ export class BirthYearInputComponent implements ControlValueAccessor {
   writeValue(value: number): void {
     this.value = value;
     this.year = this.computeYear(value);
+  }
+
+  validate(control: AbstractControl): ValidationErrors | null {
+    return !!control.value && control.value < 1900 ? { invalidYear: true } : null;
   }
 }

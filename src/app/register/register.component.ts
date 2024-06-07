@@ -4,11 +4,12 @@ import { UserService } from '../user.service';
 import { Router } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { UserModel } from '../models/user.model';
+import { BirthYearInputComponent } from '../birth-year-input/birth-year-input.component';
 
 @Component({
   selector: 'pr-register',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf],
+  imports: [ReactiveFormsModule, NgIf, BirthYearInputComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
@@ -17,7 +18,10 @@ export class RegisterComponent {
   login = this.fb.control('', [Validators.required, Validators.minLength(3)]);
   password = this.fb.control('', [Validators.required]);
   confirmPassword = this.fb.control('', [Validators.required]);
-  birthYear = this.fb.control<number | null>(null, [Validators.required, Validators.min(1900), Validators.max(new Date().getFullYear())]);
+  birthYear = this.fb.control<number | null>(null, {
+    validators: [Validators.required, Validators.min(1900), Validators.max(new Date().getFullYear())],
+    updateOn: 'change'
+  });
   passwordGroup = this.fb.group(
     {
       password: this.password,

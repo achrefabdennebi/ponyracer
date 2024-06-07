@@ -62,7 +62,7 @@
   </div>
   <div class="mb-3">
     <label for="birthYear" class="form-label">Birth year</label>
-    <input id="birthYear" type="number" class="form-control" formControlName="birthYear" />
+    <pr-birth-year-input id="birthYear" [inputId]="1" class="form-control" formControlName="birthYear" />
     <!-- error message here -->
     <div
       id="birth-year-required-error"
@@ -74,7 +74,7 @@
     <div
       id="birth-year-invalid-error"
       class="invalid-feedback"
-      *ngIf="userForm.controls.birthYear.hasError('min') || userForm.controls.birthYear.hasError('max')"
+      *ngIf="userForm.controls.birthYear.hasError('invalidYear') || userForm.controls.birthYear.hasError('max')"
     >
       This is not a valid year
     </div>
