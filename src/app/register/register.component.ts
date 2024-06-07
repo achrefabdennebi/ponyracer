@@ -18,10 +18,7 @@ export class RegisterComponent {
   login = this.fb.control('', [Validators.required, Validators.minLength(3)]);
   password = this.fb.control('', [Validators.required]);
   confirmPassword = this.fb.control('', [Validators.required]);
-  birthYear = this.fb.control<number | null>(null, {
-    validators: [Validators.required, Validators.min(1900), Validators.max(new Date().getFullYear())],
-    updateOn: 'change'
-  });
+  birthYear = this.fb.control<number | null>(null, [Validators.required]);
   passwordGroup = this.fb.group(
     {
       password: this.password,

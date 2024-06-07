@@ -24,7 +24,7 @@ export class BirthYearInputComponent implements ControlValueAccessor, Validator 
   onChange: (value: number | null) => void = () => {};
   onTouched: () => void = () => {};
 
-  @Input({ required: true }) inputId!: number;
+  @Input({ required: true }) inputId!: string;
 
   onBirthYearChange(event: Event): void {
     const value = (<HTMLInputElement>event.target).valueAsNumber;
@@ -32,18 +32,20 @@ export class BirthYearInputComponent implements ControlValueAccessor, Validator 
       this.year = null;
       this.onChange(null);
     } else {
-      this.onChange(value);
+      this.year = this.computeYear(value);
+      this.onChange(this.year);
     }
   }
 
   private computeYear(value: number) {
-    if (value < 0 || value === null) return null;
-    if (value > 100) {
-      return value;
-    }
     const lastTwoDigitsOfTheCurrentYear = new Date().getFullYear() % 100;
     const firstTwoDigitsOfTheCurrentYear = Math.floor(new Date().getFullYear() / 100);
-    if (value > lastTwoDigitsOfTheCurrentYear) {
+
+    if (value === null || value < 0) {
+      return null;
+    } else if (value > 100) {
+      return value;
+    } else if (value > lastTwoDigitsOfTheCurrentYear) {
       return (firstTwoDigitsOfTheCurrentYear - 1) * 100 + value;
     } else {
       return firstTwoDigitsOfTheCurrentYear * 100 + value;
@@ -67,7 +69,11 @@ export class BirthYearInputComponent implements ControlValueAccessor, Validator 
     this.year = this.computeYear(value);
   }
 
-  validate(control: AbstractControl): ValidationErrors | null {
-    return !!control.value && control.value < 1900 ? { invalidYear: true } : null;
-  }
+  validate(): ValidationErrors | null {
+    if (this.year === null) {
+      return null;
+    } else if (this.year < 1900 || this.year > new Date().getFullYear()) {
+      return { invalidYear: true };
+    }
+    return null;  }
 }
