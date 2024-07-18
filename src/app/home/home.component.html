@@ -1,8 +1,13 @@
 <div class="text-center" style="margin-top: 100px">
   <h1>Ponyracer <small>Always a pleasure to bet on ponies</small></h1>
 </div>
-
-<div class="text-center">
-  <a class="btn btn-primary me-2" routerLink="/login">Login</a>
-  <a class="btn btn-primary" routerLink="/register">Register</a>
-</div>
+@if (!user) {
+  <div class="text-center">
+    <a class="btn btn-primary me-2" routerLink="/login">Login</a>
+    <a class="btn btn-primary" routerLink="/register">Register</a>
+  </div>
+} @else {
+  <div class="text-center">
+    <a class="btn btn-primary me-2" routerLink="/races">Races</a>
+  </div>
+}
