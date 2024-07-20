@@ -9,7 +9,9 @@ import { HttpClient } from '@angular/common/http';
 export class UserService {
   userEvents = new BehaviorSubject<UserModel | null>(null);
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient) {
+    this.retrieveUser();
+  }
 
   authenticate(login: string | null | undefined, password: string | null | undefined): Observable<UserModel> {
     const authenticationInfo = {
@@ -18,7 +20,7 @@ export class UserService {
     };
     return this.httpClient
       .post<UserModel>('https://ponyracer.ninja-squad.com/api/users/authentication', authenticationInfo)
-      .pipe(tap((user: UserModel) => this.userEvents.next(user)));
+      .pipe(tap((user: UserModel) => this.storeLoggedInUser(user)));
   }
 
   register(
@@ -32,5 +34,18 @@ export class UserService {
       birthYear
     };
     return this.httpClient.post<UserModel>('https://ponyracer.ninja-squad.com/api/users', registerInfo);
+  }
+
+  storeLoggedInUser(user: UserModel) {
+    window.localStorage.setItem('rememberMe', JSON.stringify(user));
+    this.userEvents.next(user);
+  }
+
+  retrieveUser() {
+    const value = window.localStorage.getItem('rememberMe');
+    if (value) {
+      const user = JSON.parse(value) as UserModel;
+      this.userEvents.next(user);
+    }
   }
 }
