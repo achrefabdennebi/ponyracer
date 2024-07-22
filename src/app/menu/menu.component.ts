@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { UserService } from '../user.service';
 import { tap } from 'rxjs';
 import { UserModel } from '../models/user.model';
@@ -16,10 +16,19 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class MenuComponent {
   navbarCollapsed = true;
   user: UserModel | null = null;
-  constructor(private readonly userService: UserService) {
+  constructor(
+    private readonly userService: UserService,
+    private router: Router
+  ) {
     this.userService.userEvents.pipe(takeUntilDestroyed()).subscribe(user => (this.user = user));
   }
   public toggleNavbar() {
     this.navbarCollapsed = !this.navbarCollapsed;
+  }
+
+  logout(event: Event): void {
+    event.preventDefault();
+    this.userService.logout();
+    this.router.navigateByUrl('/');
   }
 }
