@@ -1,15 +1,16 @@
+import { signal, WritableSignal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
 import { UserModel } from '../models/user.model';
 import { UserService } from '../user.service';
 import { HomeComponent } from './home.component';
 
 describe('HomeComponent', () => {
+  let currentUser: WritableSignal<UserModel | null>;
+
   beforeEach(() => {
-    const userService = jasmine.createSpyObj<UserService>('UserService', [], {
-      userEvents: new BehaviorSubject<UserModel | null>(null)
-    });
+    currentUser = signal(null);
+    const userService = jasmine.createSpyObj<UserService>('UserService', [], { currentUser });
     TestBed.configureTestingModule({
       providers: [provideRouter([]), { provide: UserService, useValue: userService }]
     });
@@ -36,9 +37,6 @@ describe('HomeComponent', () => {
     const element = fixture.nativeElement;
     fixture.detectChanges();
 
-    fixture.componentInstance.user = null;
-    fixture.detectChanges();
-
     const button = element.querySelector('a[href="/login"]');
     expect(button)
       .withContext('You should have an `a` element to display the link to the login. Maybe you forgot to use `routerLink`?')
@@ -52,33 +50,11 @@ describe('HomeComponent', () => {
     expect(buttonRegister.textContent).withContext('The link should have a text').toContain('Register');
   });
 
-  it('should listen to userEvents', () => {
-    const userService = TestBed.inject(UserService);
-    const fixture = TestBed.createComponent(HomeComponent);
-
-    const user = { login: 'cedric', money: 200 } as UserModel;
-
-    userService.userEvents.next(user);
-
-    expect(fixture.componentInstance.user).withContext('Your component should listen to the `userEvents` observable').toBe(user);
-  });
-
-  it('should unsubscribe on destruction', () => {
-    const userService = TestBed.inject(UserService);
-    const fixture = TestBed.createComponent(HomeComponent);
-    expect(userService.userEvents.observed).withContext('You need to subscribe to userEvents when the component is created').toBeTrue();
-    fixture.destroy();
-
-    expect(userService.userEvents.observed)
-      .withContext('You need to unsubscribe from userEvents when the component is destroyed')
-      .toBeFalse();
-  });
-
   it('should display only a link to go the races page if logged in', () => {
     const fixture = TestBed.createComponent(HomeComponent);
     fixture.detectChanges();
 
-    fixture.componentInstance.user = { login: 'cedric' } as UserModel;
+    currentUser.set({ login: 'cedric' } as UserModel);
     fixture.detectChanges();
 
     const element = fixture.nativeElement;

@@ -30,8 +30,7 @@ describe('UserService', () => {
   afterAll(() => http.verify());
 
   it('should authenticate a user', () => {
-    // spy on the store method
-    spyOn(userService, 'storeLoggedInUser');
+    spyOn(Storage.prototype, 'setItem');
 
     let actualUser: UserModel | undefined;
     userService.authenticate('cedric', 'hello').subscribe(fetchedUser => (actualUser = fetchedUser));
@@ -41,7 +40,10 @@ describe('UserService', () => {
     req.flush(user);
 
     expect(actualUser).withContext('The observable should return the user').toBe(user);
-    expect(userService.storeLoggedInUser).toHaveBeenCalledWith(user);
+    expect(userService.currentUser()).toEqual(user);
+
+    TestBed.flushEffects();
+    expect(Storage.prototype.setItem).toHaveBeenCalledWith('rememberMe', JSON.stringify(user));
   });
 
   it('should register a user', () => {
@@ -55,40 +57,31 @@ describe('UserService', () => {
     expect(actualUser).withContext('You should emit the user.').toBe(user);
   });
 
-  it('should store the logged in user', () => {
-    spyOn(userService.userEvents, 'next');
-    spyOn(Storage.prototype, 'setItem');
-
-    userService.storeLoggedInUser(user);
-
-    expect(userService.userEvents.next).toHaveBeenCalledWith(user);
-    expect(Storage.prototype.setItem).toHaveBeenCalledWith('rememberMe', JSON.stringify(user));
-  });
-
   it('should retrieve a user if one is stored', () => {
-    spyOn(userService.userEvents, 'next');
     localStorageGetItem.and.returnValue(JSON.stringify(user));
 
     userService.retrieveUser();
 
-    expect(userService.userEvents.next).toHaveBeenCalledWith(user);
+    expect(userService.currentUser()).toEqual(user);
   });
 
   it('should retrieve no user if none stored', () => {
-    spyOn(userService.userEvents, 'next');
-
     userService.retrieveUser();
 
-    expect(userService.userEvents.next).not.toHaveBeenCalled();
+    expect(userService.currentUser()).toBeNull();
   });
 
   it('should logout the user', () => {
-    spyOn(userService.userEvents, 'next');
     spyOn(Storage.prototype, 'removeItem');
+    localStorageGetItem.and.returnValue(JSON.stringify(user));
+    userService.retrieveUser();
+    expect(userService.currentUser()).toEqual(user);
 
     userService.logout();
 
-    expect(userService.userEvents.next).toHaveBeenCalledWith(null);
+    expect(userService.currentUser()).toBeNull();
+
+    TestBed.flushEffects();
     expect(Storage.prototype.removeItem).toHaveBeenCalledWith('rememberMe');
   });
 });

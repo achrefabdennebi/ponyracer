@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { effect, Injectable, signal } from '@angular/core';
 import { BehaviorSubject, Observable, of, Subject, tap } from 'rxjs';
 import { UserModel } from './models/user.model';
 import { HttpClient } from '@angular/common/http';
@@ -7,10 +7,18 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class UserService {
-  userEvents = new BehaviorSubject<UserModel | null>(null);
+  private user = signal<UserModel | null>(null);
+  readonly currentUser = this.user.asReadonly();
 
   constructor(private httpClient: HttpClient) {
     this.retrieveUser();
+    effect(() => {
+      if (this.user()) {
+        window.localStorage.setItem('rememberMe', JSON.stringify(this.user()));
+      } else {
+        window.localStorage.removeItem('rememberMe');
+      }
+    });
   }
 
   authenticate(login: string | null | undefined, password: string | null | undefined): Observable<UserModel> {
@@ -37,20 +45,18 @@ export class UserService {
   }
 
   storeLoggedInUser(user: UserModel) {
-    window.localStorage.setItem('rememberMe', JSON.stringify(user));
-    this.userEvents.next(user);
+    this.user.set(user);
   }
 
   retrieveUser() {
     const value = window.localStorage.getItem('rememberMe');
     if (value) {
       const user = JSON.parse(value) as UserModel;
-      this.userEvents.next(user);
+      this.user.set(user);
     }
   }
 
   logout() {
-    this.userEvents.next(null);
-    window.localStorage.removeItem('rememberMe');
+    this.user.set(null);
   }
 }
