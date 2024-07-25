@@ -1,7 +1,8 @@
 import { effect, Injectable, signal } from '@angular/core';
-import { BehaviorSubject, Observable, of, Subject, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { UserModel } from './models/user.model';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +28,7 @@ export class UserService {
       password
     };
     return this.httpClient
-      .post<UserModel>('https://ponyracer.ninja-squad.com/api/users/authentication', authenticationInfo)
+      .post<UserModel>(`${environment.baseUrl}/api/users/authentication`, authenticationInfo)
       .pipe(tap((user: UserModel) => this.storeLoggedInUser(user)));
   }
 
@@ -41,7 +42,7 @@ export class UserService {
       password,
       birthYear
     };
-    return this.httpClient.post<UserModel>('https://ponyracer.ninja-squad.com/api/users', registerInfo);
+    return this.httpClient.post<UserModel>(`${environment.baseUrl}/api/users`, registerInfo);
   }
 
   storeLoggedInUser(user: UserModel) {
