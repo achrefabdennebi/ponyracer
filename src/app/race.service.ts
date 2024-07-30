@@ -13,4 +13,12 @@ export class RaceService {
     const params = { status: 'PENDING' };
     return this.http.get<Array<RaceModel>>(`${environment.baseUrl}/api/races`, { params });
   }
+
+  public bet(raceId: number, ponyId: number): Observable<RaceModel> {
+    return this.http.post<RaceModel>(`${environment.baseUrl}/api/races/${raceId}/bets`, { ponyId });
+  }
+
+  public get(id: number) {
+    return this.http.get<RaceModel>(`${environment.baseUrl}/api/races/${id}`);
+  }
 }
