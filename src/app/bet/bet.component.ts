@@ -26,11 +26,17 @@ export class BetComponent {
   }
 
   betOnPony(pony: PonyModel) {
-    console.log(pony);
-    this.raceService.bet(this.raceModel!.id, pony.id).subscribe({
-      next: (race: RaceModel) => (this.raceModel = race),
-      error: () => (this.betFailed = true)
-    });
+    if (!this.isPonySelected(pony)) {
+      this.raceService.bet(this.raceModel!.id, pony.id).subscribe({
+        next: (race: RaceModel) => (this.raceModel = race),
+        error: () => (this.betFailed = true)
+      });
+    } else {
+      this.raceService.cancelBet(this.raceModel!.id).subscribe({
+        next: () => (this.raceModel!.betPonyId = undefined),
+        error: () => (this.betFailed = true)
+      });
+    }
   }
 
   isPonySelected(pony: PonyModel): boolean {
