@@ -7,7 +7,6 @@ import { BirthYearInputComponent } from './birth-year-input.component';
   template: `<form [formGroup]="form">
     <pr-birth-year-input formControlName="birthYear"></pr-birth-year-input>
   </form>`,
-  standalone: true,
   imports: [ReactiveFormsModule, BirthYearInputComponent]
 })
 class TestComponent {

@@ -3,7 +3,6 @@ import { AbstractControl, ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR
 
 @Component({
   selector: 'pr-birth-year-input',
-  standalone: true,
   imports: [],
   providers: [
     {

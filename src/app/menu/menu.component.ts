@@ -8,7 +8,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'pr-menu',
-  standalone: true,
   imports: [RouterLink, CommonModule],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.css'

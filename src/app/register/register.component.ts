@@ -8,7 +8,6 @@ import { BirthYearInputComponent } from '../birth-year-input/birth-year-input.co
 
 @Component({
   selector: 'pr-register',
-  standalone: true,
   imports: [ReactiveFormsModule, NgIf, BirthYearInputComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'

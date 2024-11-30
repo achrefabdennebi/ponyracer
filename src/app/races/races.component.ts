@@ -6,7 +6,6 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'pr-races',
-  standalone: true,
   imports: [RaceComponent, RouterLink],
   templateUrl: './races.component.html',
   styleUrl: './races.component.css'

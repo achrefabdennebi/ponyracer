@@ -8,7 +8,6 @@ import { FromNowPipe } from '../from-now.pipe';
 
 @Component({
   selector: 'pr-bet',
-  standalone: true,
   imports: [PonyComponent, FromNowPipe],
   templateUrl: './bet.component.html',
   styleUrl: './bet.component.css'

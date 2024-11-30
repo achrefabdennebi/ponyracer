@@ -6,7 +6,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'pr-home',
-  standalone: true,
   imports: [RouterLink],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
