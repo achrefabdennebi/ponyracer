@@ -39,16 +39,19 @@ describe('Bet', () => {
 
     cy.intercept('GET', 'api/races/12', race).as('getRace');
 
-    cy.intercept('POST', 'api/races/12/bets', { ...race, betPonyId: 1 }).as('betRace');
+    cy.intercept('POST', 'api/races/12/bets', {}).as('betRace');
   }
 
   function storeUserInLocalStorage(): void {
     localStorage.setItem('rememberMe', JSON.stringify(user));
   }
 
-  beforeEach(() => startBackend());
+  beforeEach(() => {
+    startBackend();
+    localStorage.setItem('preferred-lang', 'en');
+  });
 
-  it('should bet on ponies and cancel', () => {
+  it('should bet on ponies', () => {
     storeUserInLocalStorage();
     cy.visit('/races');
     cy.wait('@getRaces');
@@ -67,16 +70,19 @@ describe('Bet', () => {
     cy.get('.selected').should('have.length', 0);
 
     // bet on first pony
+    cy.intercept('GET', 'api/races/12', { ...race, betPonyId: 1 }).as('secondGetRace');
     cy.get('img').first().click();
     cy.wait('@betRace').its('request.body').should('contain', { ponyId: 1 });
+    cy.wait('@secondGetRace');
 
     // a pony is now selected
     cy.get('.selected').should('have.length', 1);
 
     // bet on the second one
-    cy.intercept('POST', 'api/races/12/bets', { ...race, betPonyId: 2 }).as('secondBetRace');
+    cy.intercept('GET', 'api/races/12', { ...race, betPonyId: 2 }).as('thirdGetRace');
     cy.get('img').eq(1).click();
-    cy.wait('@secondBetRace').its('request.body').should('contain', { ponyId: 2 });
+    cy.wait('@betRace').its('request.body').should('contain', { ponyId: 2 });
+    cy.wait('@thirdGetRace');
 
     // a pony is still selected
     cy.get('.selected').should('have.length', 1);
@@ -116,8 +122,10 @@ describe('Bet', () => {
     cy.intercept('DELETE', 'api/races/12/bets', {}).as('cancelBetRace');
 
     // cancel bet
+    cy.intercept('GET', 'api/races/12', { ...race }).as('fourthGetRace');
     cy.get('img').eq(1).click();
     cy.wait('@cancelBetRace');
+    cy.wait('@fourthGetRace');
 
     // no pony is selected anymore
     cy.get('.selected').should('have.length', 0);

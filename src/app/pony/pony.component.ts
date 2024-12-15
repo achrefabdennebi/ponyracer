@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, computed, EventEmitter, Input, Output } from '@angular/core';
 import { PonyModel } from '../models/pony.model';
 
 @Component({
@@ -9,30 +9,10 @@ import { PonyModel } from '../models/pony.model';
 })
 export class PonyComponent {
   @Input({ required: true }) ponyModel!: PonyModel;
+  @Input() isRunning = false;
+
   @Output() ponyClicked = new EventEmitter<PonyModel>();
-
-  getPonyImageUrl(): string {
-    let img = '';
-    switch (this.ponyModel.color.toLowerCase()) {
-      case 'purple':
-        img = 'assets/images/pony-purple.gif';
-        break;
-      case 'orange':
-        img = 'assets/images/pony-orange.gif';
-        break;
-      case 'yellow':
-        img = 'assets/images/pony-yellow.gif';
-        break;
-      case 'green':
-        img = 'assets/images/pony-green.gif';
-        break;
-      case 'blue':
-        img = 'assets/images/pony-blue.gif';
-        break;
-    }
-
-    return img;
-  }
+  public readonly ponyImageUrl = computed(() => `images/pony-${this.ponyModel.color.toLowerCase()}${this.isRunning ? '-running' : ''}.gif`);
 
   clicked() {
     this.ponyClicked.emit(this.ponyModel);
